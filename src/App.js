@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import LoginForm from './components/LoginForm';
+import SignupForm from './components/SignupForm';
+import Dashboard from './components/Dashboard';
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token') !== null);
+
+  const handleLogin = () => {
+    setLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setLoggedIn(false);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>MyApp</h1>
+      {loggedIn ? (
+        <Dashboard onLogout={handleLogout} />
+      ) : (
+        <div>
+          <SignupForm />
+          <LoginForm onLogin={handleLogin} />
+        </div>
+      )}
     </div>
   );
 }
